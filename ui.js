@@ -5,6 +5,9 @@ var currClassIndex = null;
 var currClassAmt = null;
 var currClassGoal = null;
 
+var isSaving = false;
+var needsSave = false;
+
 function setupClassList(rows, fileId) {
   classDataFileId = fileId;
   
@@ -93,25 +96,41 @@ function currClassAdd(amt) {
     appendPre("Error: No file selected. Not saved.");
     document.getElementById("saveInfo").innerText = "Not saved.";
   } else {
-    document.getElementById("saveInfo").innerText = "Saving...";
-    //update sheet
-    gapi.client.sheets.spreadsheets.values.update({
-      spreadsheetId: classDataFileId,
-      range: "Sheet1!A2:C",
-      valueInputOption: "RAW",
-      resource: {
-        values: classData
-      }
-    }).then(function(response) {
-      var result = response.result;
-      console.log(result.updatedCells + " cells updated.");
-      
-      var now = new Date();
-      document.getElementById("saveInfo").innerText = "Saved at " + now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0") + ":" + now.getSeconds().toString().padStart(2, "0"); //FIXME
-    }, function(response) {
-      appendPre('Error: ' + response.result.error.message);
-    });
+    if(isSaving) {
+      needsSave = true;
+    } else {
+      save();
+    }
   }
   
   updateCurrUI();
+}
+
+function save() {
+  isSaving = true;
+  needsSave = false;
+  
+  document.getElementById("saveInfo").innerText = "Saving...";
+  //update sheet
+  gapi.client.sheets.spreadsheets.values.update({
+    spreadsheetId: classDataFileId,
+    range: "Sheet1!A2:C",
+    valueInputOption: "RAW",
+    resource: {
+      values: classData
+    }
+  }).then(function(response) {
+    var result = response.result;
+    console.log(result.updatedCells + " cells updated.");
+    
+    var now = new Date();
+    document.getElementById("saveInfo").innerText = "Saved at " + now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0") + ":" + now.getSeconds().toString().padStart(2, "0"); //FIXME
+    
+    isSaving = false;
+    if(needsSave) {
+      save();
+    }
+  }, function(response) {
+    appendPre('Error: ' + response.result.error.message);
+  });
 }
