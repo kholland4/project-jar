@@ -40,6 +40,7 @@
         function handleClientLoad() {
           gapi.load('client:auth2', initClient);
           gapi.load('picker', initPicker);
+          gapi.client.load('drive', 'v2', initDrive);
         }
 
         /**
@@ -121,7 +122,22 @@
           
         }
         
+        var driveLoaded = false;
+        var pickerLoaded = false;
+        
+        function initDrive() {
+          driveLoaded = true;
+          updateLoadState();
+        }
+        
         function initPicker() {
+          pickerLoaded = true;
+          updateLoadState();
+        }
+        
+        function updateLoadState() {
+          if(!driveLoaded || !pickerLoaded) { return; }
+          
           fileButton.style.display = 'inline-block';
           fileButton.onclick = function() {
             if(oauthToken) {
@@ -147,10 +163,21 @@
         }
         
         function loadFile(fileId) {
+          gapi.client.drive.files.get({
+            fileId: fileId,
+          }).then(function(response) {
+            appendPre("Selected file " + response.title);
+          }, function(response) {
+            appendPre('Error: ' + response.result.error.message);
+          });
+          
           gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: fileId,
-            range: 'Sheet1!A2:C',
+            range: 'Sheet1!A2:C'
           }).then(function(response) {
+            appendPre("Loaded.");
+            console.log(response.result);
+            
             var range = response.result;
             if(range.values.length > 0) {
               appendPre('Name, #:');
