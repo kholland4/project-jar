@@ -104,7 +104,8 @@ function currClassAdd(amt) {
       var result = response.result;
       console.log(result.updatedCells + " cells updated.");
       
-      document.getElementById("saveInfo").innerText = "Saved on " + new Date().toString(); //FIXME
+      var now = new Date();
+      document.getElementById("saveInfo").innerText = "Saved at " + date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + ":" + date.getSeconds().toString().padStart(2, "0"); //FIXME
     }, function(response) {
       appendPre('Error: ' + response.result.error.message);
     });
