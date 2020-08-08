@@ -26,7 +26,7 @@
 
         // Authorization scopes required by the API; multiple scopes can be
         // included, separated by spaces.
-        var SCOPES = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly";
+        var SCOPES = "https://www.googleapis.com/auth/drive.file";
 
         var authorizeButton = document.getElementById('authorize_button');
         var signoutButton = document.getElementById('signout_button');
@@ -147,14 +147,6 @@
         }
         
         function loadFile(fileId) {
-          gapi.client.drive.files.get({
-            fileId: fileId,
-          }).then(function(response) {
-            appendPre("Selected file " + response.title);
-          }, function(response) {
-            appendPre('Error: ' + response.result.error.message);
-          });
-          
           gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: fileId,
             range: 'Sheet1!A2:C'
