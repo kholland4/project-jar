@@ -180,6 +180,18 @@
         <button class="uiRowButton" onclick="selectClassButton();">Select</button>
         <button class="uiRowButton" onclick="clearClassButton();">Clear</button>
       </div>
+      <div class="uiRow">
+        <span class="uiRowLabel">Current:</span>
+        <span class="uiRowText" id="currAmount"></span>
+      </div>
+      <div class="uiRow">
+        <span class="uiRowLabel">Goal:</span>
+        <span class="uiRowText" id="currGoal"></span>
+      </div>
+      <div class="uiRow">
+        <button class="uiRowButton" onclick="currClassAdd(1);">+1</button>
+        <button class="uiRowButton" onclick="currClassAdd(10);">+10</button>
+      </div>
     </div>
     
     <canvas id="main"></canvas>
