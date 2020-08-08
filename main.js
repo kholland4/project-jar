@@ -166,7 +166,7 @@ function run() {
   
   if(dropCount < toDrop && frameCount % 4 == 0) {
     for(var i = 0; i < Math.min(16, toDrop - dropCount); i++) {
-      dropBall(Matter.Common.random(fountainX - Math.round(boxW / 2) + ballRadTyp * 4, fountainX + Math.round(boxW / 2) - ballRadTyp * 4), fountainY);
+      dropBall(Matter.Common.random(Math.min(fountainX - Math.round(boxW / 2) + ballRadTyp * 8, fountainX), Math.max(fountainX + Math.round(boxW / 2) - ballRadTyp * 8), fountainX), fountainY);
       dropCount++;
       totalCount++;
     }
