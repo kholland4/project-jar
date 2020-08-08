@@ -1,10 +1,13 @@
 var classData = [];
+var classDataFileId = null;
 
 var currClassIndex = null;
 var currClassAmt = null;
 var currClassGoal = null;
 
-function setupClassList(rows) {
+function setupClassList(rows, fileId) {
+  classDataFileId = fileId;
+  
   var sel = document.getElementById("classSelect");
   while(sel.firstChild) { sel.removeChild(sel.firstChild); }
   
@@ -47,14 +50,21 @@ function selectClassButton() {
 }
 
 function clearClassButton() {
-  var currClassIndex;
-  var currClassAmt;
-  var currClassGoal;
+  currClassIndex = null;
+  currClassAmt = null;
+  currClassGoal = null;
 
   begin();
+  
+  updateCurrUI();
 }
 
 function updateCurrUI() {
+  if(currClassIndex === null) {
+    document.getElementById("currClass").innerText = "";
+  } else {
+    document.getElementById("currClass").innerText = classData[currClassIndex][0];
+  }
   if(currClassAmt === null) {
     document.getElementById("currAmount").innerText = "";
   } else if(isNaN(currClassAmt)) {
@@ -73,10 +83,30 @@ function updateCurrUI() {
 }
 
 function currClassAdd(amt) {
+  if(currClassIndex === null) { return; }
+  
   currClassAmt += amt;
   toDrop += amt;
+  classData[currClassIndex][1] = currClassAmt.toString();
   
-  //TODO update sheet
+  if(classDataFileId === null) {
+    appendPre("Error: No file selected. Not saved.");
+  } else {
+    //update sheet
+    gapi.client.sheets.spreadsheets.values.update({
+      spreadsheetId: fileId,
+      range: "Sheet1!A2:C",
+      valueInputOption: "RAW",
+      resource: {
+        values: classData
+      }
+    }).then(function(response) {
+      var result = response.result;
+      console.log(result.updatedCells + " cells updated.");
+    }, function(response) {
+      appendPre('Error: ' + response.result.error.message);
+    });
+  }
   
   updateCurrUI();
 }

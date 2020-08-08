@@ -155,7 +155,7 @@
             
             var range = response.result;
             //if(range.values.length > 0) {
-              setupClassList(range.values);
+              setupClassList(range.values, fileId);
             /*} else {
               appendPre('No data found.');
             }*/
@@ -179,6 +179,10 @@
       <div class="uiRow">
         <button class="uiRowButton" onclick="selectClassButton();">Select</button>
         <button class="uiRowButton" onclick="clearClassButton();">Clear</button>
+      </div>
+      <div class="uiRow">
+        <span class="uiRowLabel">Class:</span>
+        <span class="uiRowText" id="currClass"></span>
       </div>
       <div class="uiRow">
         <span class="uiRowLabel">Current:</span>
