@@ -26,7 +26,7 @@
 
         // Authorization scopes required by the API; multiple scopes can be
         // included, separated by spaces.
-        var SCOPES = "https://www.googleapis.com/auth/drive.file";
+        var SCOPES = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly";
 
         var authorizeButton = document.getElementById('authorize_button');
         var signoutButton = document.getElementById('signout_button');
@@ -40,7 +40,6 @@
         function handleClientLoad() {
           gapi.load('client:auth2', initClient);
           gapi.load('picker', initPicker);
-          gapi.client.load('drive', 'v2', initDrive);
         }
 
         /**
@@ -122,22 +121,7 @@
           
         }
         
-        var driveLoaded = false;
-        var pickerLoaded = false;
-        
-        function initDrive() {
-          driveLoaded = true;
-          updateLoadState();
-        }
-        
         function initPicker() {
-          pickerLoaded = true;
-          updateLoadState();
-        }
-        
-        function updateLoadState() {
-          if(!driveLoaded || !pickerLoaded) { return; }
-          
           fileButton.style.display = 'inline-block';
           fileButton.onclick = function() {
             if(oauthToken) {
