@@ -91,7 +91,9 @@ function currClassAdd(amt) {
   
   if(classDataFileId === null) {
     appendPre("Error: No file selected. Not saved.");
+    document.getElementById("saveInfo").innerText = "Not saved.";
   } else {
+    document.getElementById("saveInfo").innerText = "Saving...";
     //update sheet
     gapi.client.sheets.spreadsheets.values.update({
       spreadsheetId: classDataFileId,
