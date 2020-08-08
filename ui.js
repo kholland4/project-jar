@@ -94,7 +94,7 @@ function currClassAdd(amt) {
   } else {
     //update sheet
     gapi.client.sheets.spreadsheets.values.update({
-      spreadsheetId: fileId,
+      spreadsheetId: classDataFileId,
       range: "Sheet1!A2:C",
       valueInputOption: "RAW",
       resource: {
@@ -103,6 +103,8 @@ function currClassAdd(amt) {
     }).then(function(response) {
       var result = response.result;
       console.log(result.updatedCells + " cells updated.");
+      
+      document.getElementById("saveInfo").innerText = "Saved on " + new Date().toString(); //FIXME
     }, function(response) {
       appendPre('Error: ' + response.result.error.message);
     });
