@@ -19,6 +19,7 @@
         // Client ID and API key from the Developer Console
         var CLIENT_ID = '207261664225-1c8da7v1o1iio21jhclvdjl68ogt9uhb.apps.googleusercontent.com';
         var API_KEY = 'AIzaSyCNqt3Hmecx1CtBQiUsHkWYUtqDGH5reKE';
+        var APP_ID = '207261664225';
 
         // Array of API discovery doc URLs for APIs used by the quickstart
         var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -126,6 +127,7 @@
             if(oauthToken) {
               var picker = new google.picker.PickerBuilder().
                   addView(google.picker.ViewId.SPREADSHEETS).
+                  setAppId(APP_ID).
                   setOAuthToken(oauthToken).
                   setDeveloperKey(API_KEY).
                   setCallback(pickerCallback).
@@ -150,7 +152,7 @@
             range: 'Sheet1!A2:C',
           }).then(function(response) {
             var range = response.result;
-            if (range.values.length > 0) {
+            if(range.values.length > 0) {
               appendPre('Name, #:');
               for (i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
