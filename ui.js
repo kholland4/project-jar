@@ -115,7 +115,7 @@ function save() {
   gapi.client.sheets.spreadsheets.values.update({
     spreadsheetId: classDataFileId,
     range: "Sheet1!A2:C",
-    valueInputOption: "RAW",
+    valueInputOption: "USER_ENTERED",
     resource: {
       values: classData
     }
