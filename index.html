@@ -8,6 +8,8 @@
   <body>
     <div id="overlay">
       <!-- https://developers.google.com/sheets/api/quickstart/js -->
+      <!-- https://developers.google.com/picker/docs -->
+      <button id="file_button" style="display: none;">Select File</button>
       <button id="authorize_button" style="display: none;">Authorize</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
       
@@ -27,12 +29,16 @@
 
         var authorizeButton = document.getElementById('authorize_button');
         var signoutButton = document.getElementById('signout_button');
+        var fileButton = document.getElementById('file_button');
+        
+        var oauthToken;
 
         /**
          *  On load, called to load the auth2 library and API client library.
          */
         function handleClientLoad() {
           gapi.load('client:auth2', initClient);
+          gapi.load('picker', initPicker);
         }
 
         /**
@@ -53,6 +59,8 @@
             updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
             authorizeButton.onclick = handleAuthClick;
             signoutButton.onclick = handleSignoutClick;
+            
+            oauthToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
           }, function(error) {
             appendPre(JSON.stringify(error, null, 2));
           });
@@ -105,9 +113,41 @@
          * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
          */
         function onSignIn() {
+          
+        }
+        
+        function onSignOut() {
+          
+        }
+        
+        function initPicker() {
+          fileButton.style.display = 'block';
+          fileButton.onclick = function() {
+            if(oauthToken) {
+              var picker = new google.picker.PickerBuilder().
+                  addView(google.picker.ViewId.SPREADSHEETS).
+                  setOAuthToken(oauthToken).
+                  setDeveloperKey(API_KEY).
+                  setCallback(pickerCallback).
+                  build();
+              picker.setVisible(true);
+            }
+          };
+        }
+        
+        function pickerCallback() {
+          if(data.action == google.picker.Action.PICKED) {
+            var fileId = data.docs[0].id;
+            console.log('The user selected: ' + fileId);
+            
+            loadFile(fileId);
+          }
+        }
+        
+        function loadFile(fileId) {
           gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-            range: 'Class Data!A2:E',
+            spreadsheetId: fileId,
+            range: 'Sheet1!A2:C',
           }).then(function(response) {
             var range = response.result;
             if (range.values.length > 0) {
@@ -124,11 +164,6 @@
             appendPre('Error: ' + response.result.error.message);
           });
         }
-        
-        function onSignOut() {
-          
-        }
-
       </script>
 
       <script async defer src="https://apis.google.com/js/api.js"
