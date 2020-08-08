@@ -73,10 +73,10 @@
         function updateSigninStatus(isSignedIn) {
           if (isSignedIn) {
             authorizeButton.style.display = 'none';
-            signoutButton.style.display = 'block';
+            signoutButton.style.display = 'inline-block';
             onSignIn();
           } else {
-            authorizeButton.style.display = 'block';
+            authorizeButton.style.display = 'inline-block';
             signoutButton.style.display = 'none';
             onSignOut();
           }
@@ -121,7 +121,7 @@
         }
         
         function initPicker() {
-          fileButton.style.display = 'block';
+          fileButton.style.display = 'inline-block';
           fileButton.onclick = function() {
             if(oauthToken) {
               var picker = new google.picker.PickerBuilder().
@@ -135,10 +135,10 @@
           };
         }
         
-        function pickerCallback() {
+        function pickerCallback(data) {
           if(data.action == google.picker.Action.PICKED) {
             var fileId = data.docs[0].id;
-            console.log('The user selected: ' + fileId);
+            console.log("The user selected: " + fileId);
             
             loadFile(fileId);
           }
@@ -151,11 +151,11 @@
           }).then(function(response) {
             var range = response.result;
             if (range.values.length > 0) {
-              appendPre('Name, Major:');
+              appendPre('Name, #:');
               for (i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
                 // Print columns A and E, which correspond to indices 0 and 4.
-                appendPre(row[0] + ', ' + row[4]);
+                appendPre(row[0] + ', ' + row[1]);
               }
             } else {
               appendPre('No data found.');
