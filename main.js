@@ -58,6 +58,8 @@ function init() {
   canvas.onmousedown = function() { mouseHasMoved = false; }
   canvas.onmouseup = function() {
     //if(!mouseHasMoved && running) { dropBall(mouseX, mouseY); }
+    currClassAdd(1);
+    toDrop--; //FIXME patchy
     dropBall(mouseX, mouseY);
     dropCount++;
     totalCount++;
