@@ -5,3 +5,10 @@ body {
 canvas#main {
   display: block;
 }
+
+#overlay {
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+}
