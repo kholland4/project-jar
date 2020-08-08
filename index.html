@@ -3,6 +3,7 @@
   <head>
     <script src="matter.min.js" type="text/javascript"></script>
     <script src="main.js" type="text/javascript"></script>
+    <script src="ui.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="main.css">
   </head>
   <body>
@@ -60,8 +61,6 @@
             updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
             authorizeButton.onclick = handleAuthClick;
             signoutButton.onclick = handleSignoutClick;
-            
-            oauthToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
           }, function(error) {
             appendPre(JSON.stringify(error, null, 2));
           });
@@ -114,7 +113,7 @@
          * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
          */
         function onSignIn() {
-          
+          oauthToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
         }
         
         function onSignOut() {
@@ -155,16 +154,11 @@
             console.log(response.result);
             
             var range = response.result;
-            if(range.values.length > 0) {
-              appendPre('Name, #:');
-              for (i = 0; i < range.values.length; i++) {
-                var row = range.values[i];
-                // Print columns A and E, which correspond to indices 0 and 4.
-                appendPre(row[0] + ', ' + row[1]);
-              }
-            } else {
+            //if(range.values.length > 0) {
+              setupClassList(range.values);
+            /*} else {
               appendPre('No data found.');
-            }
+            }*/
           }, function(response) {
             appendPre('Error: ' + response.result.error.message);
           });
@@ -176,6 +170,18 @@
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
       </script>
     </div>
+    
+    <div id="ui">
+      <div class="uiRow">
+        <span class="uiRowLabel">Class:</span>
+        <select id="classSelect" class="uiRowSelect"></select>
+      </div>
+      <div class="uiRow">
+        <button class="uiRowButton" onclick="selectClassButton();">Select</button>
+        <button class="uiRowButton" onclick="clearClassButton();">Clear</button>
+      </div>
+    </div>
+    
     <canvas id="main"></canvas>
   </body>
 </html>

@@ -12,3 +12,26 @@ canvas#main {
   top: 10px;
   right: 10px;
 }
+
+#ui {
+  position: absolute;
+  z-index: 10;
+  bottom: 10px;
+  right: 10px;
+}
+
+.uiRow {
+  
+}
+.uiRowLabel {
+  
+}
+.uiRowSelect {
+  
+}
+.uiRowButton {
+  
+}
+.uiRowNumInput {
+  
+}
