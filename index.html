@@ -150,7 +150,7 @@
             spreadsheetId: fileId,
             range: 'Sheet1!A2:C'
           }).then(function(response) {
-            appendPre("Loaded.");
+            document.getElementById("saveInfo").innerText = "Loaded.";
             console.log(response.result);
             
             var range = response.result;
