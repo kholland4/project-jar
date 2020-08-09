@@ -22,6 +22,8 @@ function setupClassList(rows, fileId) {
     opt.innerText = classData[i][0];
     sel.appendChild(opt);
   }
+  
+  clearClassButton();
 }
 
 function selectClassButton() {
