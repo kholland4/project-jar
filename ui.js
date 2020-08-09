@@ -89,6 +89,8 @@ function updateCurrUI() {
 
 function currClassAdd(amt) {
   if(currClassIndex === null) { return; }
+  if(isNaN(amt)) { return; }
+  if(amt === undefined) { return; }
   
   currClassAmt += amt;
   toDrop += amt;
