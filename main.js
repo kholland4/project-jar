@@ -60,7 +60,7 @@ function init() {
     //if(!mouseHasMoved && running) { dropBall(mouseX, mouseY); }
     if(currClassIndex !== null) { //FIXME patchy
       currClassAdd(1);
-      toDrop--; //FIXME patchy
+      //toDrop--; //FIXME patchy
       dropBall(mouseX, mouseY);
       dropCount++;
       totalCount++;
